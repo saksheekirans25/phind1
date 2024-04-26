@@ -16,6 +16,8 @@
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
+        <!-- Search Bar -->
+        <input type="text" id="search" placeholder="Search menu...">
     </header>
     <main>
         <section id="menu">
@@ -24,7 +26,31 @@
         </section>
         <section id="cart">
             <h2>Your Cart</h2>
-            <!-- Cart items will be dynamically added here -->
+            <div id="shopping-cart">
+                <div class="txt-heading">
+                    <h1>Shopping cart</h1>
+                </div>
+                <a onClick="emptyCart()" id="btnEmpty">Empty Cart</a>
+                <table class="tbl-cart" cellpadding="10" cellspacing="1">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th class='text-right' width="10%">Unit Price</th>
+                            <th class='text-right' width="5%">Quantity</th>
+                            <th class='text-right' width="10%">Sub Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cartTableBody">
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="text-right">Total:</td>
+                            <td id="itemCount" class="text-right" colspan="2"></td>
+                            <td id="totalAmount" class="text-right"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </section>
     </main>
     <footer>
@@ -34,52 +60,20 @@
 </body>
 </html>
 <style>
-/* styles.css */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-}
-
-nav ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline;
-    margin: 0 10px;
-}
-
-nav ul li a {
-    color: #fff;
-    text-decoration: none;
-}
-
-main {
-    padding: 20px;
-}
-
-footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 10px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
-</style>
-
+    document.getElementById('search').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const menuItems = document.querySelectorAll('#menu div');
+    menuItems.forEach(item => {
+        const itemName = item.querySelector('h3').textContent.toLowerCase();
+        if (itemName.includes(searchTerm)) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+});
 <script>
-// script.js
+    // script.js
 document.addEventListener('DOMContentLoaded', function() {
     // Sample menu items
     const menuItems = [
@@ -96,21 +90,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function addToCart(name, price) {
-        // Simplified cart management
-        const cartSection = document.getElementById('cart');
-        const cartItem = document.createElement('div');
-        cartItem.innerHTML = `<p>${name} - $${price}</p><button onclick="removeFromCart('${name}')">Remove</button>`;
-        cartSection.appendChild(cartItem);
+        // Add item to cart using sessionStorage
+        let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+        cart.push({ name, price });
+        sessionStorage.setItem('cart', JSON.stringify(cart));
+        updateCartUI();
     }
 
-    function removeFromCart(name) {
-        // Simplified cart management
-        const cartItems = document.querySelectorAll('#cart div');
-        cartItems.forEach(item => {
-            if (item.textContent.includes(name)) {
-                item.remove();
-            }
+    function updateCartUI() {
+        const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+        const cartTableBody = document.getElementById('cartTableBody');
+        cartTableBody.innerHTML = '';
+        let total = 0;
+        cart.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${item.name}</td><td class='text-right'>$${item.price}</td><td class='text-right'>1</td><td class='text-right'>$${item.price}</td>`;
+            cartTableBody.appendChild(row);
+            total += item.price;
         });
+        document.getElementById('itemCount').textContent = cart.length;
+        document.getElementById('totalAmount').textContent = `$${total}`;
     }
+
+    function emptyCart() {
+        sessionStorage.removeItem('cart');
+        updateCartUI();
+    }
+
+    // Checkout functionality
+    document.getElementById('btnEmpty').addEventListener('click', function() {
+        console.log('Checking out...');
+        console.log(JSON.parse(sessionStorage.getItem('cart')));
+        // Here you would typically integrate with a payment gateway
+    });
+
+    // Update cart UI on page load
+    updateCartUI();
 });
-</script>
+
+    </script>
+</style>
