@@ -103,18 +103,7 @@ footer {
     width: 100%;
 }
 
-    document.getElementById('search').addEventListener('input', function(e) {
-    const searchTerm = e.target.value.toLowerCase();
-    const menuItems = document.querySelectorAll('#menu div');
-    menuItems.forEach(item => {
-        const itemName = item.querySelector('h3').textContent.toLowerCase();
-        if (itemName.includes(searchTerm)) {
-            item.style.display = 'block';
-        } else {
-            item.style.display = 'none';
-        }
-    });
-});
+</style>
 <script>
     // script.js
 document.addEventListener('DOMContentLoaded', function() {
@@ -169,7 +158,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update cart UI on page load
     updateCartUI();
+
+    // Search functionality
+    document.getElementById('search').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const menuItems = document.querySelectorAll('#menu div');
+        menuItems.forEach(item => {
+            const itemName = item.querySelector('h3').textContent.toLowerCase();
+            if (itemName.includes(searchTerm)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
 });
 
-    </script>
-</style>
+</script>
