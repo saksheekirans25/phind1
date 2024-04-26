@@ -102,6 +102,79 @@ footer {
     bottom: 0;
     width: 100%;
 }
+    /* Updated styles.css */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #8CB369; /* Green background */
+    color: #FFFFFF; /* White text */
+}
+
+header {
+    background-color: #E57A44; /* Orange header */
+    color: #FFFFFF;
+    padding: 20px;
+    text-align: center;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+main {
+    padding: 20px;
+}
+
+footer {
+    background-color: #E57A44; /* Orange footer */
+    color: #FFFFFF;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Additional styles for the cart and menu items */
+.tbl-cart {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tbl-cart th, .tbl-cart td {
+    border: 1px solid #FFFFFF;
+    padding: 10px;
+}
+
+.tbl-cart tfoot {
+    background-color: #E57A44; /* Orange footer in the cart */
+}
+
+.btn-add-to-cart {
+    background-color: #FFFFFF; /* White button */
+    color: #E57A44; /* Orange text */
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
 
 </style>
 <script>
@@ -173,5 +246,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+    // Example of a corrected addToCart function
+function addToCart(name, price) {
+    // Assuming 'cart' is an array of cart items
+    let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+    cart.push({ name, price });
+    sessionStorage.setItem('cart', JSON.stringify(cart));
+    updateCartUI(); // Update the UI to reflect the new cart state
+}
+
 
 </script>
